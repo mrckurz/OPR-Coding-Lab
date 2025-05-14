@@ -1,4 +1,4 @@
-# 🧪 Coding Lab: Einstieg in Java Lambda Expressions
+# 🧪 OPR Coding Lab zur Vertiefung von Java Lambda Expressions in Java
 
 ## 🎯 Ziel
 Du lernst in diesem Lab:

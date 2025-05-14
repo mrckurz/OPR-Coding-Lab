@@ -54,7 +54,7 @@ public class LambdaLab {
             new Person("David", 20)
         );
 
-        // Übungen folgen hier
+        // Lösungen folgen hier
     }
 
     public static void filterUndZeige(List<Person> personen, Predicate<Person> kriterium) {
@@ -69,55 +69,80 @@ public class LambdaLab {
 
 ---
 
-## 🔄 Übungen
+## 🔄 Übungen mit Musterlösungen
 
 ### 🧩 **Übung 1: Sortierung mit Lambdas**
 
-1. Sortiere die Liste `personen` **aufsteigend nach Alter**.
-2. Sortiere die Liste **absteigend nach Name**.
-3. Sortiere **zuerst nach Alter, dann nach Name**.
+```java
+// 1. Nach Alter aufsteigend
+personen.sort((p1, p2) -> Integer.compare(p1.getAlter(), p2.getAlter()));
 
-*Hinweis: Verwende `personen.sort(...)` mit Lambdas.*
+// 2. Nach Name absteigend
+personen.sort((p1, p2) -> p2.getName().compareTo(p1.getName()));
+
+// 3. Nach Alter, dann Name
+personen.sort((p1, p2) -> {
+    int cmp = Integer.compare(p1.getAlter(), p2.getAlter());
+    return (cmp != 0) ? cmp : p1.getName().compareTo(p2.getName());
+});
+```
 
 ---
 
 ### 🧩 **Übung 2: Ausgabe mit `forEach`**
 
-1. Gib alle Namen in **Großbuchstaben** aus.
-2. Wenn das Alter > 25 ist, gib einen Hinweis aus (z. B. "👴").
+```java
+// 1. Namen in Großbuchstaben
+personen.forEach(p -> System.out.println(p.getName().toUpperCase()));
 
-*Hinweis: Verwende `personen.forEach(...)` mit Lambdas.*
+// 2. Hinweis bei Alter > 25
+personen.forEach(p -> {
+    if (p.getAlter() > 25) {
+        System.out.println(p + " 👴");
+    } else {
+        System.out.println(p);
+    }
+});
+```
 
 ---
 
 ### 🧩 **Übung 3: Filter mit Predicate**
 
-1. Gib nur die Personen aus, die **jünger als 25** sind.
-2. Gib nur die Personen aus, deren **Name mit „A“** beginnt.
-3. Gib nur die Personen aus, deren Alter **zwischen 22 und 28** liegt.
+```java
+// 1. Jünger als 25
+filterUndZeige(personen, p -> p.getAlter() < 25);
 
-*Hinweis: Verwende `filterUndZeige(...)` und gib Lambdas als `Predicate<Person>`.*
+// 2. Name beginnt mit „A“
+filterUndZeige(personen, p -> p.getName().startsWith("A"));
+
+// 3. Alter zwischen 22 und 28
+filterUndZeige(personen, p -> p.getAlter() >= 22 && p.getAlter() <= 28);
+```
 
 ---
 
 ### 🧩 **[Optional] Übung 4: Streams kombinieren**
 
-Nutze `Stream`, um folgendes zu tun:
-
-1. Filtere alle Personen mit Alter ≥ 25.
-2. Wandle ihre Namen in Großbuchstaben um.
-3. Gib sie mit `forEach` aus.
-
 ```java
 personen.stream()
-        .filter(p -> ...)
-        .map(p -> ...)
+        .filter(p -> p.getAlter() >= 25)
+        .map(p -> p.getName().toUpperCase())
         .forEach(System.out::println);
 ```
 
 ---
 
-## ✅ Bonusideen
+## ✅ Bonusideen (Beispiel-Lösung)
 
-- Erstelle eine eigene Methode, die `Function<Person, String>` annimmt und z. B. eine Visitenkarte oder E-Mail-Adresse ausgibt.
-- Kombiniere mehrere `Predicate`s mit `and()`, `or()` oder `negate()`.
+```java
+// Funktion zur Generierung einer E-Mail-Adresse
+Function<Person, String> emailGenerator = p -> p.getName().toLowerCase() + "@example.com";
+personen.forEach(p -> System.out.println(emailGenerator.apply(p)));
+
+// Kombination mehrerer Predicate
+Predicate<Person> isAdult = p -> p.getAlter() >= 18;
+Predicate<Person> nameStartsWithA = p -> p.getName().startsWith("A");
+
+filterUndZeige(personen, isAdult.and(nameStartsWithA));
+```
